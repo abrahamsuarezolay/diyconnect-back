@@ -26,7 +26,7 @@ public class Band {
     private long band_id;
 
     private String name;
-    private String gender;
+    private String genre;
     private String description;
 
     @ManyToOne
@@ -38,16 +38,19 @@ public class Band {
     @JoinColumn(name = "city_id")
     private City city;
 
-    private List<String> links;
+    private String instagramLink;
+    private String facebookLink;
+    private String spotifyLink;
+    private String bandcampLink;
+    private String soundcloudLink;
 
     @Override
     public String toString() {
         return "Band{" +
                 "band_id=" + band_id +
                 ", name='" + name + '\'' +
-                ", gender='" + gender + '\'' +
+                ", genre='" + genre + '\'' +
                 ", description='" + description + '\'' +
-                ", links=" + links +
                 '}';
     }
 }

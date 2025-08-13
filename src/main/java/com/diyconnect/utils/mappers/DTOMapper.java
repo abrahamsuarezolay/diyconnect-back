@@ -54,11 +54,15 @@ public class DTOMapper {
         BandDTO bandDTO = new BandDTO(
                 band.getBand_id(),
                 band.getName(),
-                band.getGender(),
+                band.getGenre(),
                 band.getDescription(),
                 band.getUser(),
                 band.getCity(),
-                band.getLinks()
+                band.getFacebookLink(),
+                band.getInstagramLink(),
+                band.getSpotifyLink(),
+                band.getBandcampLink(),
+                band.getSoundcloudLink()
         );
         return bandDTO;
     }
@@ -71,11 +75,15 @@ public class DTOMapper {
             bandDTOs.add(new BandDTO(
                     band.getBand_id(),
                     band.getName(),
-                    band.getGender(),
+                    band.getGenre(),
                     band.getDescription(),
                     band.getUser(),
                     band.getCity(),
-                    band.getLinks()
+                    band.getFacebookLink(),
+                    band.getInstagramLink(),
+                    band.getSpotifyLink(),
+                    band.getBandcampLink(),
+                    band.getSoundcloudLink()
             ));
         }
 

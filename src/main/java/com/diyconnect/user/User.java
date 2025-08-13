@@ -39,6 +39,8 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    private String bio;
+
     @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
     @JsonManagedReference("userMessagesSentReference")
     private List<Message> messagesSent;

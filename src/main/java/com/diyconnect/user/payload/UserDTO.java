@@ -23,6 +23,7 @@ public class UserDTO {
     private String username;
     private String email;
     private String password;
+    private String bio;
     private List<Message> messagesSent;
     private List<Message> messagesReceived;
     private City city;
