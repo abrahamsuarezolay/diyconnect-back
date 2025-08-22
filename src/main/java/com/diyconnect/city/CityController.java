@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/cities")
@@ -20,16 +22,45 @@ public class CityController {
 
     private DTOMapper dtoMapper = new DTOMapper();
 
-    @GetMapping("/byname")
+    @GetMapping("/bycity")
     public ResponseEntity<?> getCityByName(@RequestParam String cityName){
         try{
-            City city = cityService.findByName(cityName).get();
-            CityDTO cityDTO = dtoMapper.cityToDTO(city);
+            List<City> citiesByName = cityService.findByName(cityName).get();
+            List <CityDTO> citiesDTO = dtoMapper.citiesToDTO(citiesByName);
 
-            return new ResponseEntity<CityDTO>(cityDTO, HttpStatus.OK);
+            return new ResponseEntity <List<CityDTO>> (citiesDTO, HttpStatus.OK);
 
         }catch(CityNotFoundException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/bystate")
+    public ResponseEntity<?> getCitiesByState(@RequestParam String stateName){
+        try{
+            List<City> citiesByState = cityService.findByState(stateName).get();
+            List<CityDTO> citiesDto = dtoMapper.citiesToDTO(citiesByState);
+
+            return new ResponseEntity<List<CityDTO>>(citiesDto, HttpStatus.OK);
+
+        }catch(CityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/bycountry")
+    public ResponseEntity<?> getCitiesByCountry(@RequestParam String countryName){
+        try{
+            List<City> citiesByCountry = cityService.findByCountry(countryName).get();
+            List<CityDTO> citiesDto = dtoMapper.citiesToDTO(citiesByCountry);
+
+            return new ResponseEntity<List<CityDTO>>(citiesDto, HttpStatus.OK);
+
+        }catch(CityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

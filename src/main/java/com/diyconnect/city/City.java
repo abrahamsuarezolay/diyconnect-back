@@ -23,6 +23,8 @@ public class City {
     private long city_id;
 
     private String name;
+    private String state;
+    private String country;
 
     @OneToMany(mappedBy = "city")
     @JsonIgnore

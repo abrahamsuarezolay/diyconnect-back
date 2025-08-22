@@ -214,6 +214,71 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<List<User>> findByCityState(String stateName) {
+
+        Optional<List<User>> usersQuery = userRepository.findByCityState(stateName);
+
+        if (usersQuery.get().isEmpty()) {
+            throw new NoUsersForCityException();
+        } else {
+
+            //We filter only the enabled users
+            Optional<List<User>> users = Optional.of(usersQuery.get().stream().filter(user -> user.isEnabled()).toList());
+
+            return users;
+        }
+    }
+
+    @Override
+    public Optional<List<User>> findByCityCountry(String countryName) {
+
+        Optional<List<User>> usersQuery = userRepository.findByCityCountry(countryName);
+
+        if (usersQuery.get().isEmpty()) {
+            throw new NoUsersForCityException();
+        } else {
+
+            //We filter only the enabled users
+            Optional<List<User>> users = Optional.of(usersQuery.get().stream().filter(user -> user.isEnabled()).toList());
+
+            return users;
+        }
+    }
+
+    @Override
+    public Optional<List<User>> findByCityNameAndCityStateAndCityCountry(String cityName, String stateName, String countryName) {
+
+        Optional<List<User>> usersQuery = userRepository.findByCityNameAndCityStateAndCityCountry(cityName, stateName, countryName);
+
+        if (usersQuery.get().isEmpty()) {
+            throw new NoUsersForCityException();
+        } else {
+
+            //We filter only the enabled users
+            Optional<List<User>> users = Optional.of(usersQuery.get().stream().filter(user -> user.isEnabled()).toList());
+
+            return users;
+        }
+    }
+
+    @Override
+    public Optional<List<User>> findByCityStateAndCityCountry(String stateName, String countryName) {
+
+        Optional<List<User>> usersQuery = userRepository.findByCityStateAndCityCountry(stateName, countryName);
+
+        if (usersQuery.get().isEmpty()) {
+            throw new NoUsersForCityException();
+        } else {
+
+            //We filter only the enabled users
+            Optional<List<User>> users = Optional.of(usersQuery.get().stream().filter(user -> user.isEnabled()).toList());
+
+            return users;
+        }
+    }
+
+
+    @Override
     public Optional<User> findByEmail(String email) {
 
         Optional<User> user = userRepository.findByEmail(email);
@@ -225,9 +290,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Optional<User> modifyCity(String cityName, String userEmail) {
+    public Optional<User> modifyCity(String cityName, String stateName, String countryName, String userEmail) {
 
-        City cityToAdd = cityRepository.findByName(cityName).get();
+        City cityToAdd = cityRepository.findFirstByNameAndStateAndCountry(cityName, stateName, countryName).get();
         User userToModify = userRepository.findByEmail(userEmail).get();
 
         userToModify.setCity(cityToAdd);

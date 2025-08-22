@@ -14,6 +14,14 @@ public interface UserService {
 
     Optional<List<User>> findByCityName(String cityName);
 
+    Optional<List<User>> findByCityState(String stateName);
+
+    Optional<List<User>> findByCityCountry(String countryName);
+
+    Optional<List<User>> findByCityNameAndCityStateAndCityCountry(String cityName, String stateName, String countryName);
+
+    Optional<List<User>> findByCityStateAndCityCountry(String stateName, String countryName);
+
     Optional<User> findByEmail(String email);
 
     boolean existsById(Long aLong);
@@ -36,7 +44,7 @@ public interface UserService {
 
     void activateUser(String token);
 
-    Optional<User> modifyCity(String cityName, String userEmail);
+    Optional<User> modifyCity(String cityName, String stateName, String countryName, String userEmail);
 
     Optional<User> resetPassword(String email, String newPassword, String confirmPassword, PasswordResetToken token);
 

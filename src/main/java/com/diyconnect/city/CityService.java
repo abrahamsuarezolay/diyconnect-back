@@ -1,5 +1,6 @@
 package com.diyconnect.city;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CityService {
@@ -27,5 +28,9 @@ public interface CityService {
 
     void deleteAll();
 
-    Optional<City> findByName(String name);
+    Optional <List<City>> findByName(String name);
+
+    Optional <List<City>> findByState(String stateName);
+
+    Optional <List<City>> findByCountry(String countryName);
 }

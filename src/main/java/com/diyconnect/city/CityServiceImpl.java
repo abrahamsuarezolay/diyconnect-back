@@ -1,9 +1,12 @@
 package com.diyconnect.city;
 
 import com.diyconnect.exception.cityException.CityNotFoundException;
+import com.diyconnect.exception.cityException.CountryNotFoundException;
+import com.diyconnect.exception.cityException.StateNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,16 +75,38 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Optional<City> findByName(String name) {
+    public Optional <List<City>> findByName(String name) {
 
-        Optional<City> city = cityRepository.findByName(name);
+        Optional <List<City>> city = cityRepository.findByName(name);
 
         if (city.isEmpty()){
             throw new CityNotFoundException();
         }else{
             return city;
         }
+    }
 
+    @Override
+    public Optional <List<City>> findByState(String stateName) {
 
+        Optional<List<City>> citiesByState = cityRepository.findByState(stateName);
+
+        if (citiesByState.isEmpty()){
+            throw new StateNotFoundException();
+        }else{
+            return citiesByState;
+        }
+    }
+
+    @Override
+    public Optional <List<City>> findByCountry(String countryName) {
+
+        Optional<List<City>> citiesByCountry = cityRepository.findByCountry(countryName);
+
+        if (citiesByCountry.isEmpty()){
+            throw new CountryNotFoundException();
+        }else{
+            return citiesByCountry ;
+        }
     }
 }

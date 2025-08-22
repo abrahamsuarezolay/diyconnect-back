@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyCityRequest {
     private String cityName;
+    private String stateName;
+    private String countryName;
     private String userEmail;
 
 

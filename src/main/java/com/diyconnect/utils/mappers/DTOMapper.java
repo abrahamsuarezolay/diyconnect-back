@@ -19,6 +19,16 @@ public class DTOMapper {
         return new CityDTO(city.getCity_id(), city.getName(), city.getUsers(), city.getBands());
     }
 
+    public List<CityDTO> citiesToDTO(List<City> cities){
+        List<CityDTO> citiesList = new ArrayList<>();
+
+        for(City city: cities){
+            citiesList.add(new CityDTO(city.getCity_id(), city.getName(), city.getUsers(), city.getBands()));
+        }
+
+        return citiesList;
+    }
+
     public UserDTO userToDTO(User user){
         return new UserDTO(
                 user.getUser_id(),

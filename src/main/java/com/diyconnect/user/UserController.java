@@ -95,10 +95,69 @@ public class UserController {
         }
     }
 
+    @GetMapping("/findbystate")
+    public ResponseEntity<?> findUsersByState(@RequestParam  String stateName){
+        try{
+            List<User> users = userService.findByCityState(stateName).get();
+            List<UserDTO> usersDTO = dtoMapper.ListUsersToDTO(users);
+
+            return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
+
+        }catch(NoUsersForCityException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/findbycountry")
+    public ResponseEntity<?> findUsersByCountry(@RequestParam String countryName){
+        try{
+            List<User> users = userService.findByCityCountry(countryName).get();
+            List<UserDTO> usersDTO = dtoMapper.ListUsersToDTO(users);
+
+            return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
+
+        }catch(NoUsersForCityException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/findbycitystatecountry")
+    public ResponseEntity<?> findUsersByCityStateCountry(
+            @RequestParam String cityName,
+            @RequestParam String stateName,
+            @RequestParam String countryName)
+    {
+        try{
+            List<User> users = userService.findByCityNameAndCityStateAndCityCountry(cityName, stateName, countryName).get();
+            List<UserDTO> usersDTO = dtoMapper.ListUsersToDTO(users);
+
+            return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
+
+        }catch(NoUsersForCityException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/findbystatecountry")
+    public ResponseEntity<?> findUsersByStateCountry(
+            @RequestParam String stateName,
+            @RequestParam String countryName)
+    {
+        try{
+            List<User> users = userService.findByCityStateAndCityCountry(stateName, countryName).get();
+            List<UserDTO> usersDTO = dtoMapper.ListUsersToDTO(users);
+
+            return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
+
+        }catch(NoUsersForCityException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/modifyCity")
     public ResponseEntity<?> modifyCity(@RequestBody ModifyCityRequest request){
         try{
-            User user = userService.modifyCity(request.getCityName(), request.getUserEmail()).get();
+            User user = userService.modifyCity(request.getCityName(), request.getStateName(), request.getCountryName(), request.getUserEmail()).get();
 
             return new ResponseEntity<>(user, HttpStatus.OK);
         }catch (UserException e){
