@@ -1,5 +1,7 @@
 package com.diyconnect.user;
 
+import com.diyconnect.city.City;
+import com.diyconnect.city.CityService;
 import com.diyconnect.exception.cityException.CityException;
 import com.diyconnect.exception.userException.NoUsersForCityException;
 import com.diyconnect.exception.userException.UserException;
@@ -29,6 +31,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private CityService cityService;
+
+    @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     private DTOMapper dtoMapper = new DTOMapper();
@@ -42,6 +47,12 @@ public class UserController {
                     user.getPassword(),
                     user.isAdmin()
             );
+
+            Optional <City> city = cityService.findFirstByNameAndStateAndCountry(user.getCity().getName(), user.getCity().getState(), user.getCity().getCountry());
+
+            System.out.println(city);
+
+            savedUser.setCity(city.get());
 
             userService.save(savedUser);
 

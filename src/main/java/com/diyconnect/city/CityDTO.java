@@ -15,6 +15,8 @@ import java.util.List;
 public class CityDTO {
     private long city_id;
     private String name;
+    private String state;
+    private String country;
     private List<User> users;
     private List<Band> bands;
 }

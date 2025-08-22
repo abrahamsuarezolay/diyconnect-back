@@ -109,4 +109,16 @@ public class CityServiceImpl implements CityService {
             return citiesByCountry ;
         }
     }
+
+    @Override
+    public Optional <City> findFirstByNameAndStateAndCountry(String cityName, String stateName, String countryName) {
+
+        Optional <City> city = cityRepository.findFirstByNameAndStateAndCountry(cityName, stateName, countryName);
+
+        if (city.isEmpty()){
+            throw new CountryNotFoundException();
+        }else{
+            return city ;
+        }
+    }
 }

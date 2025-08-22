@@ -33,4 +33,6 @@ public interface CityService {
     Optional <List<City>> findByState(String stateName);
 
     Optional <List<City>> findByCountry(String countryName);
+
+    Optional<City> findFirstByNameAndStateAndCountry(String name, String state, String country);
 }
