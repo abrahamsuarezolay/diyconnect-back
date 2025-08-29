@@ -1,10 +1,13 @@
 package com.diyconnect.message.payload;
 import com.diyconnect.user.User;
 import com.diyconnect.user.UserService;
+import com.diyconnect.user.payload.UserConversationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,12 +16,8 @@ public class MessageDTO {
 
     private long message_id;
     private String message;
-    private User sender;
-    private User receiver;
+    private LocalDateTime timestamp;
+    private UserConversationDTO sender;
+    private UserConversationDTO receiver;
 
-    public MessageDTO(String message, User sender, User receiver) {
-        this.message = message;
-        this.sender = sender;
-        this.receiver = receiver;
-    }
 }

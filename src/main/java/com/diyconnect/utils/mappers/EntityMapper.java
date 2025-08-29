@@ -7,13 +7,4 @@ public class EntityMapper {
     public EntityMapper() {
     }
 
-    public Message messageDTOtoMessage(MessageDTO messageDTO) {
-        Message message = new Message(
-                messageDTO.getMessage(),
-                messageDTO.getSender(),
-                messageDTO.getReceiver()
-        );
-        return message;
-    }
-
 }

@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/users/savenewuser").permitAll()
                         .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/messages/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/users/confirmregistration").permitAll()

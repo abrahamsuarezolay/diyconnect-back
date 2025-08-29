@@ -1,13 +1,18 @@
 package com.diyconnect.message;
 
 import com.diyconnect.exception.messageException.MessageEmptyException;
+import com.diyconnect.message.payload.ConversationDTO;
+import com.diyconnect.message.payload.MessageDTO;
 import com.diyconnect.user.User;
+import com.diyconnect.user.payload.UserConversationDTO;
 import com.diyconnect.utils.checkers.MessageContentChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,5 +92,68 @@ public class MessageServiceImpl implements MessageService {
 
     public Optional<List<Message>> getConversation(User sender, User receiver) {
         return messageRepository.getConversation(sender, receiver);
+    }
+
+    @Override
+    public Optional<List<ConversationDTO>> findAllConversationsByUserSender(User sender) {
+
+        //Here we obtain all the messages of a user, whether he is the sender or the receiver
+        List<Message> messagesList = messageRepository.findAllConversationsByUserSender(sender).get();
+
+        List<ConversationDTO> conversations = new ArrayList<ConversationDTO>();
+
+        //We iterate over all the messages from that user
+        for(Message message: messagesList){
+
+            //Here we check if the conversation is already in our conversationsDTO. The first iteration always returns null.
+            ConversationDTO conversation = conversations.stream()
+                    .filter(convo ->
+                            (convo.getReceiver_id().equals(message.getReceiver().getUser_id())
+                                    && convo.getSender_id().equals(message.getSender().getUser_id()))
+                                    ||
+                                    (convo.getReceiver_id().equals(message.getSender().getUser_id())
+                                            && convo.getSender_id().equals(message.getReceiver().getUser_id()))
+                    )
+                    .findFirst()
+                    .orElse(null);
+
+            if(conversation == null){
+                //We add a new conversation to the list
+                List<MessageDTO> messagesOfConversation = new ArrayList<MessageDTO>();
+                messagesOfConversation.add(new MessageDTO(
+                        message.getMessage_id(),
+                        message.getMessage(),
+                        message.getTimestamp(),
+                        new UserConversationDTO(message.getSender().getUser_id(), message.getSender().getUsername(), message.getSender().getEmail()),
+                        new UserConversationDTO(message.getReceiver().getUser_id(), message.getReceiver().getUsername(), message.getReceiver().getEmail()))
+                );
+
+                conversations.add(new ConversationDTO.Builder()
+                                .senderId(message.getSender().getUser_id())
+                                .senderName(message.getSender().getUsername())
+                                .senderEmail(message.getSender().getEmail())
+                                .receiverId(message.getReceiver().getUser_id())
+                                .receiverName(message.getReceiver().getUsername())
+                                .receiverEmail(message.getReceiver().getEmail())
+                                .messages(messagesOfConversation)
+                                .build()
+                        );
+            }else{
+                //If the convo it's already added to the list we add the message
+                conversation.getMessages().add(new MessageDTO(
+                        message.getMessage_id(),
+                        message.getMessage(),
+                        message.getTimestamp(),
+                        new UserConversationDTO(message.getSender().getUser_id(), message.getSender().getUsername(), message.getSender().getEmail()),
+                        new UserConversationDTO(message.getReceiver().getUser_id(), message.getReceiver().getUsername(), message.getReceiver().getEmail())));
+            }
+
+        }
+
+        conversations.forEach(c ->
+                c.getMessages().sort(Comparator.comparing(MessageDTO::getTimestamp))
+        );
+
+        return Optional.of(conversations);
     }
 }

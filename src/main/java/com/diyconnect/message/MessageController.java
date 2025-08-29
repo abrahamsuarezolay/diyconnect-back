@@ -2,8 +2,10 @@ package com.diyconnect.message;
 
 import com.diyconnect.exception.messageException.MessageEmptyException;
 import com.diyconnect.exception.userException.UserNotFoundException;
+import com.diyconnect.message.payload.ConversationDTO;
 import com.diyconnect.message.payload.GetConversationRequest;
 import com.diyconnect.message.payload.MessageSendRequest;
+import com.diyconnect.user.User;
 import com.diyconnect.user.UserService;
 import com.diyconnect.utils.mappers.EntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,20 @@ public class MessageController {
             ).get();
 
             return new ResponseEntity<>(conversation, HttpStatus.OK);
+        }catch(UserNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getAllConversationsByUser")
+    public ResponseEntity<?> getAllConversationsByUser(@RequestParam Long user_id){
+        try{
+
+            User user = userService.findById(user_id).get();
+
+            List<ConversationDTO> conversations = messageService.findAllConversationsByUserSender(user).get();
+
+            return new ResponseEntity<>(conversations, HttpStatus.OK);
         }catch(UserNotFoundException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

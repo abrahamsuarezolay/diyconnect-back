@@ -1,5 +1,6 @@
 package com.diyconnect.message;
 
+import com.diyconnect.message.payload.ConversationDTO;
 import com.diyconnect.user.User;
 
 import java.util.List;
@@ -31,4 +32,7 @@ public interface MessageService {
     void deleteAll();
 
     Optional<List<Message>> getConversation(User sender, User receiver);
+
+    Optional<List<ConversationDTO>> findAllConversationsByUserSender(User sender);
+
 }
